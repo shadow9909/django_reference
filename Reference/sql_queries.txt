@@ -1,0 +1,11 @@
+ModelName.objects.get(colName='value')
+ModelName.objects.filter(colName__startswith='value')
+ModelName.objects.filter(colName__contains='value')
+ModelName.objects.filter(colName__gte='value')
+ModelName.objects.filter(colName__lte='value')
+ModelName.objects.exclude(colName__lte='value')
+ModelName.objects.create(colName='value')
+
+item = ModelName.object.get(title="Ecommerce")
+#######  item.review_set.all()  ########## See the children objects of a particular model---> ONE TO MANY
+#######    item.tags.all()    ########### -> MANY TO MANY

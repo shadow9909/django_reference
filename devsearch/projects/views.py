@@ -1,24 +1,14 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render
-
+from .models import Project
 # Create your views here.
-projectList = [
-    {
-        'id':'1',
-        'name': 'archit'
-    },
-    {
-        'id':'2',
-        'name': 'casper'
-    }
-]
+
 def projects(request):
-    context ={"projects":projectList}
+    projects = Project.objects.all()
+    context ={"projects":projects}
     return render(request, 'projects/projects.html', context)
 
 def project(request, pk):
-    projectObj = None 
-    for i in projectList:
-        if i["id"] == pk:
-            projectObj = i
-    return render(request, 'projects/single-project.html', {'project': projectObj})
+    projectObj = Project.objects.get(id=pk)
+    tags = projectObj.tag.all()
+    return render(request, 'projects/single-project.html', {'project': projectObj, 'tags':tags})

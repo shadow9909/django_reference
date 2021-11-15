@@ -1,4 +1,8 @@
 {% extends 'main.html' %} {% block content %}
 <h1>Single Project</h1>
-{{project.id}} || <a href="{% url 'project' project.id %}">{{project.name}}</a>
-{% endblock content %}
+{{project}} ||
+<a href="{% url 'project' project.id %}">{{project.title}}</a>
+{% for tag in project.tag.all %}
+<p>{{tag}}</p>
+<br />
+{% endfor %} {% endblock content %}
