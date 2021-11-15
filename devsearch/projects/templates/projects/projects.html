@@ -5,5 +5,6 @@
   maxime error deserunt expedita vitae explicabo eligendi, eaque, natus rem
   culpa inventore veniam provident ducimus libero qui fuga placeat.
 </p>
-
-{% endblock content %}
+{% for project in projects %} {{project.id}} ||
+<a href="/project/{{project.id}}">{{project.name}}</a> <br />
+{% endfor %} {%endblock content %}

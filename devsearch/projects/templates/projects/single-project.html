@@ -1,4 +1,4 @@
 {% extends 'main.html' %} {% block content %}
 <h1>Single Project</h1>
-
+{{project.id}} || <a href="{% url 'project' project.id %}">{{project.name}}</a>
 {% endblock content %}
