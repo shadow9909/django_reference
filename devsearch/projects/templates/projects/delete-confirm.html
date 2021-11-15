@@ -1,0 +1,8 @@
+{% extends 'main.html' %} {% block content %}
+<form action="" method="POST">
+  {%csrf_token%}
+  <a href="{% url 'projects' %}">Back</a>
+  <input type="submit" value="Confirm" />
+</form>
+
+{% endblock content %}
