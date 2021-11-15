@@ -1,7 +1,9 @@
-{% extends 'main.html' %} {% block content %}
-<h1>Single Project</h1>
-{{project}} ||
+{% extends 'main.html' %} {% load static %} {% block content %}
+
+<img src="{{ project.featured_image.url }}" alt="" />
+
 <a href="{% url 'project' project.id %}">{{project.title}}</a>
+
 {% for tag in project.tag.all %}
 <p>{{tag}}</p>
 <br />

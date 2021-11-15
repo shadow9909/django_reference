@@ -11,6 +11,7 @@ class Project(models.Model):
     tag = models.ManyToManyField('Tag')
     vote_total = models.IntegerField(default=0, null=True, blank=True)
     vote_ratio = models.IntegerField(default=0, null=True, blank=True)
+    featured_image = models.ImageField(null=True, blank=True, default="logo.jpg")
 
     def __str__(self):
         return self.title
