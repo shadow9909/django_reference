@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 import uuid
 
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+
 # Create your models here.
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -30,3 +33,26 @@ class Skills(models.Model):
     def __str__(self):
         return str(self.name)
 
+
+# shifted to signals.py
+
+# # @receiver(post_save, sender=Profile)
+# def createProfile(sender, instance, created, **kwargs):
+#     if created: #check if it is the first instance
+#         user= instance
+#         profile = Profile.objects.create(
+#             user=user,
+#             username=user.username,
+#             email=user.email,
+#             name=user.first_name
+#         )
+
+# #when profile is deleted the user should also be deleted    
+# @receiver(post_delete, sender=Profile)
+# def deleteUser(sender, instance, **kwargs):
+#     user = instance.user
+#     user.delete()
+
+
+# post_save.connect(createProfile, sender=User)
+# # post_delete.connect(deleteUser, sender=Profile)
