@@ -1,3 +1,5 @@
 devsearch/devsearch/settings.py
 devsearch/static/uikit
 devsearch/staticfiles
+devsearch/projects/migrations
+devsearch/users/migrations
