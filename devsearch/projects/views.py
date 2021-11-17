@@ -19,30 +19,39 @@ def project(request, pk):
 @login_required(login_url='login')
 def createProject(request):
     form = ProjectForm()
+    profile = request.user.profile
     context={'form':form}
     if request.method == 'POST':
         form = ProjectForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('projects')
+            #connecting projects and user
+            project = form.save(commit=False)
+            project.owner = profile
+            project.save()
+            return redirect('account')
     return render(request, 'projects/project_form.html', context)
 
 @login_required(login_url='login')
 def updateProject(request, pk):
-    form = ProjectForm(instance=Project.objects.get(id=pk))
+    profile = request.user.profile
+    project = profile.project_set.get(id=pk)
+    form = ProjectForm(instance=project)
     context={'form':form}
     if request.method == 'POST':
-        form = ProjectForm(request.POST, request.FILES ,instance=Project.objects.get(id=pk))
+        form = ProjectForm(request.POST, request.FILES ,instance=project)
         if form.is_valid():
             form.save()
-            return redirect('projects')
+            return redirect('account')
     return render(request, 'projects/project_form.html', context)
 
 @login_required(login_url='login')
 def deleteProject(request, pk):
-    project=Project.objects.get(id=pk)
+    profile = request.user.profile
+    
+    project=profile.project_set.get(id=pk)
     context={'project':project}
     if request.method == 'POST':
         project.delete()
         return redirect('projects')
-    return render(request, 'projects/delete-confirm.html', context)
+    return render(request, 'delete-confirm.html', context)
+
