@@ -4,10 +4,12 @@ from django.contrib.auth.decorators import login_required
 from .models import Profile, User
 
 from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
 # Create your views here.
 
 def loginPage(request):
-    
+    page ='login'
+    context = {'page': page}
     if request.user.is_authenticated:
         return redirect('profiles')
     
@@ -34,6 +36,27 @@ def logoutUser(request):
     logout(request)
     messages.error(request,"user logout")
     return redirect('login')
+
+
+def registerUser(request):
+    page ='register'
+    form = UserCreationForm()
+    if request.method=='POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)  # instead of directly saving the data, we are holding the data for further modifications
+            user.username = user.username.lower()
+            user.save()
+            messages.success(request, 'User Account was created!')
+            
+            login(request, user)
+            return redirect('profiles')
+        else:
+            messages.error(request, 'User Account was not created!')
+            
+        
+    context = {'page': page, 'form':form}
+    return render(request, 'users/login_register.html', context)
 
 @login_required
 def profiles(request):
