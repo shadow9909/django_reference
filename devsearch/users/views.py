@@ -1,11 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from .models import Profile, User
+from .models import Profile, Skills, User
 
 from django.contrib import messages
 # from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserCreationForm, ProfileForm, SkillForm
+from django.db.models import Q   # for searching in multiple fields
+
+from .utils import searchProjects
+
 # Create your views here.
 
 def loginPage(request):
@@ -62,8 +66,10 @@ def registerUser(request):
 
 @login_required
 def profiles(request):
-    profiles = Profile.objects.all()
-    context = {'profiles': profiles}
+    
+    profiles, search_query = searchProjects(request)
+    
+    context = {'profiles': profiles, 'search_query': search_query}
     return render(request, 'users/profiles.html', context)
 
 @login_required
