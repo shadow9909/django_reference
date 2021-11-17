@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from .models import Profile, User
 
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
+# from django.contrib.auth.forms import UserCreationForm
+from .forms import CustomUserCreationForm
 # Create your views here.
 
 def loginPage(request):
@@ -16,6 +17,7 @@ def loginPage(request):
     if(request.method=="POST"):
         username = request.POST["username"]
         password = request.POST["password"]
+        print('test')
         
         try:
             user = User.objects.get(username=username)
@@ -30,19 +32,19 @@ def loginPage(request):
         else:
             messages.error(request,'Username or pass incorrect')
         
-    return render(request, 'users/login_register.html')
+    return render(request, 'users/login_register.html', context)
 
 def logoutUser(request):
     logout(request)
-    messages.error(request,"user logout")
+    messages.info(request,"user logout")
     return redirect('login')
 
 
 def registerUser(request):
     page ='register'
-    form = UserCreationForm()
+    form = CustomUserCreationForm()
     if request.method=='POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)  # instead of directly saving the data, we are holding the data for further modifications
             user.username = user.username.lower()
