@@ -3,3 +3,7 @@ devsearch/static/uikit
 devsearch/staticfiles
 devsearch/projects/migrations
 devsearch/users/migrations
+devsearch/api/__pycache__
+devsearch/devsearch/__pycache__
+devsearch/projects/__pycache__
+devsearch/users/__pycache__
