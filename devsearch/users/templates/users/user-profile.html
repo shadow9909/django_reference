@@ -53,13 +53,13 @@
               </li>
               {% endif %}
             </ul>
-            {% if request.user.profile.id != profile.id %} {% comment %}
+            {% if request.user.profile.id != profile.id %}
             <a
               href="{% url 'create-message' profile.id %}"
               class="btn btn--sub btn--lg"
               >Send Message
             </a>
-            {% endcomment %} {% endif %}
+            {% endif %}
           </div>
         </div>
       </div>
