@@ -33,7 +33,7 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)  # creates a user session in the browser
-            return redirect('profiles')
+            return redirect(request.GET["next"] if 'next' in request.GET else 'account')
         else:
             messages.error(request, 'Username or pass incorrect')
 

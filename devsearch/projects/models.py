@@ -14,7 +14,7 @@ class Project(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(default=uuid.uuid4,
                           primary_key=True, unique=True, editable=False)
-    tag = models.ManyToManyField('Tag')
+    tag = models.ManyToManyField('Tag', blank=True)
     vote_total = models.IntegerField(default=0, null=True, blank=True)
     vote_ratio = models.IntegerField(default=0, null=True, blank=True)
     featured_image = models.ImageField(
@@ -24,7 +24,25 @@ class Project(models.Model):
         return self.title
 
     class Meta:
-        ordering = ['-created']
+        ordering = ['-vote_ratio', '-vote_total']
+
+    @property
+    def reviewers(self):
+        queryset = self.review_set.all().values_list('owner__id', flat=True)
+        return queryset
+
+    @property
+    def getVoteCount(self):
+        reviews = self.review_set.all()
+        upVotes = reviews.filter(value="up").count()
+        totalVotes = reviews.count()
+
+        ratio = (upVotes/totalVotes) * 100
+
+        self.vote_total = totalVotes
+        self.vote_ratio = ratio
+
+        self.save()
 
 
 class Review(models.Model):
@@ -32,7 +50,7 @@ class Review(models.Model):
         ('up', 'UP VOTE'),
         ('down', 'DOWN VOTE')
     )
-    # owner =
+    owner = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     body = models.TextField(null=True, blank=True)
     value = models.CharField(choices=VOTE_TYPE, max_length=200)
@@ -42,6 +60,10 @@ class Review(models.Model):
 
     def __str__(self):
         return self.value
+
+    # only one review on a project by an owner
+    class Meta:
+        unique_together = [['owner', 'project']]
 
 
 class Tag(models.Model):
